@@ -8,10 +8,9 @@ let ImageSchema = new mongoose.Schema({
         required: true
     },
     candidateId : {
-        type : mongoose.Schema.Types.ObjectId,
+        type : [mongoose.Schema.Types.ObjectId],
         ref : 'User',
         required: true,
-        unique: true
     },
     positionId : {
         type : mongoose.Schema.Types.ObjectId,

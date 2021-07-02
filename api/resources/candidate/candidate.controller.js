@@ -58,6 +58,21 @@ module.exports =  {
         }
     },
 
+    async getPosCandidates(req,res){
+        try {
+            CandidateModel.find({positionId:req.params.positionId},(err, docs)=>{
+                if(!err){
+                    res.status(200).send(docs);
+                }
+                else{
+                    res.status(400).send({"error":err});
+                }
+            }).populate('positionId', 'name').populate('userId', '_id name matnumber phonenumber email department faculty');
+        } catch (err) {
+            res.status(400).send({"error":err});
+        }
+    },
+
     async deleteCandidate(req,res){
         try {
             CandidateModel.findOne(({_id: req.params.id}),(err, doc)=>{

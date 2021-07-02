@@ -22,7 +22,7 @@ module.exports =  {
                 }
 
                 position.positionId = req.body.positionId;
-                position.candidateId = req.body.candidateId;
+                position.candidateId.push(req.body.candidateId);
                 position.voterId.push(req.body.voterId);
 
                 await position.save((err, doc)=>{
@@ -36,7 +36,7 @@ module.exports =  {
             }
             else {
                 model.positionId = req.body.positionId;
-                model.candidateId = req.body.candidateId;
+                model.candidateId.push(req.body.candidateId);
                 model.voterId.push(req.body.voterId);
 
                 await model.save((err, doc)=>{
@@ -82,6 +82,28 @@ module.exports =  {
             }).populate('positionId', 'name').populate('candidateId', '_id name matnumber phonenumber email department faculty').populate('voterId', '_id name matnumber phonenumber email department faculty');
         } catch (err) {
             res.status(400).send({"error":err});
+        }
+    },
+
+    async getResult(req,res){
+        try {
+            VoteModel.findOne({positionId: req.params.positionId},(err, docs)=>{
+                if(!err){
+                    let count = 0;
+                    for (let i=0; i<docs.candidateId.length; i++){
+                        if(docs.candidateId[i] == req.params.candidateId){
+                            count = count + 1;
+                            console.log(count);
+                        }
+                    }
+                    return res.status(200).send({"vote":count});
+                }
+                else{
+                    return res.status(400).send({"error":err});
+                }
+            });
+        } catch (err) {
+            return res.status(400).send({"error":err});
         }
     },
 

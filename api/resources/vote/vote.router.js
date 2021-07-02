@@ -12,3 +12,6 @@ voteRouter.route('/')
 voteRouter.route('/:id')
     .get(protect, voteController.getOneVote)
     .delete(protect, voteController.deleteVote);
+
+voteRouter.route('/:positionId/:candidateId')
+    .get(protect, voteController.getResult);

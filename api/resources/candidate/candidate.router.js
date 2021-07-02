@@ -12,3 +12,6 @@ positionRouter.route('/')
 positionRouter.route('/:id')
     .get(protect, candidateController.getOneCandidate)
     .delete(protect, candidateController.deleteCandidate);
+    
+positionRouter.route('/position/:positionId')
+.get(protect, candidateController.getPosCandidates);
