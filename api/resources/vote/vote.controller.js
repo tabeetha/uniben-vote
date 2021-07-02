@@ -89,6 +89,7 @@ module.exports =  {
         try {
             VoteModel.findOne({positionId: req.params.positionId},(err, docs)=>{
                 if(!err){
+                    if(!docs) return res.status(404).send({"error":"Not found"});
                     let count = 0;
                     for (let i=0; i<docs.candidateId.length; i++){
                         if(docs.candidateId[i] == req.params.candidateId){
