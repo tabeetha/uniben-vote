@@ -106,6 +106,7 @@ module.exports =  {
                             console.log(count);
                         }
                     }
+                    count = count - 1;
                     
                     return res.status(200).send({"vote":count});
                 }
