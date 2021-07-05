@@ -12,6 +12,10 @@ let ImageSchema = new mongoose.Schema({
         ref : 'Position',
         required: true
     },
+    count : {
+        type : Number,
+        default : 0
+    },
 });
 
 ImageSchema.plugin(mongosePaginate);

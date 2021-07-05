@@ -1,4 +1,5 @@
 const CandidateModel = require("./candidate.model");
+const VoteModel = require("../vote/vote.model");
 
 module.exports =  {
     async registerCandidate(req,res){
@@ -13,16 +14,45 @@ module.exports =  {
             model.positionId = req.body.positionId;
             model.userId = req.body.userId;
 
+            const position = await VoteModel.findOne(({positionId:req.body.positionId}));
+
+            if (position) {
+                for (let i=0; i<position.candidateId.length; i++){
+                    if(position.candidateId[i] == req.body.userId) return res.status(400).send({"error":"Candidate already registered"});
+                }
+
+                position.positionId = req.body.positionId;
+                position.candidateId.push(req.body.userId);
+
+                await position.save((err, doc)=>{
+                    if (err){
+                        return res.status(400).send({"error":err});
+                    }
+                });
+            }
+            else {
+                let voteModel = new VoteModel();
+                voteModel.positionId = req.body.positionId;
+                voteModel.candidateId.push(req.body.userId);
+
+                console.log("working2");
+                await voteModel.save((err, doc)=>{
+                    if (err){
+                        return res.status(400).send({"error":err});
+                    }
+                });
+            }
+
             await model.save((err, doc)=>{
                 if (!err){
-                    res.status(200).send({'success':'Candidate Registered'});
+                    return res.status(200).send({'success':'Candidate Registered'});
                 }
                 else{
-                    res.status(400).send({"error":err});
+                    return res.status(400).send({"error":err});
                 }
             });
         } catch (err) {
-            res.status(400).send({"error":err});
+            return res.status(400).send({"error":err});
         }
     },
 
@@ -32,14 +62,14 @@ module.exports =  {
                 if(!err){
                     if (!doc)
                         return res.status(404).send({"error":"Candidate not found"});
-                    res.status(200).send(doc);
+                    return res.status(200).send(doc);
                 }
                 else{
-                    res.status(400).send({"error":err});
+                    return res.status(400).send({"error":err});
                 }
             }).populate('positionId', 'name').populate('userId', '_id name matnumber phonenumber email department faculty');
         } catch (err) {
-            res.status(400).send({"error":err});
+            return res.status(400).send({"error":err});
         }
     },
 
@@ -47,14 +77,14 @@ module.exports =  {
         try {
             CandidateModel.find((err, docs)=>{
                 if(!err){
-                    res.status(200).send(docs);
+                    return res.status(200).send(docs);
                 }
                 else{
-                    res.status(400).send({"error":err});
+                    return res.status(400).send({"error":err});
                 }
             }).populate('positionId', 'name').populate('userId', '_id name matnumber phonenumber email department faculty');
         } catch (err) {
-            res.status(400).send({"error":err});
+            return res.status(400).send({"error":err});
         }
     },
 
@@ -62,39 +92,39 @@ module.exports =  {
         try {
             CandidateModel.find({positionId:req.params.positionId},(err, docs)=>{
                 if(!err){
-                    res.status(200).send(docs);
+                    return res.status(200).send(docs);
                 }
                 else{
-                    res.status(400).send({"error":err});
+                    return res.status(400).send({"error":err});
                 }
             }).populate('positionId', 'name').populate('userId', '_id name matnumber phonenumber email department faculty');
         } catch (err) {
-            res.status(400).send({"error":err});
+            return res.status(400).send({"error":err});
         }
     },
 
     async deleteCandidate(req,res){
         try {
-            CandidateModel.findOne(({_id: req.params.id}),(err, doc)=>{
-                if(!err){
-                    if (!doc)
-                        return res.status(404).send({"error":"Candidate not found"});
+            const candidate = await CandidateModel.findOne(({_id: req.params.id}));
 
-                    doc.remove((err, docs)=>{
-                        if (!err){
-                            res.status(200).send({"success":"Candidate deleted"});
-                        }
-                        else{
-                            res.status(400).send({"error":err});
-                        }
-                    });
+            if(!candidate) return res.status(404).send({"error":"Candidate not found"});
+
+            const position = await VoteModel.findOne(({positionId:req.body.positionId}));
+            if(position) {
+                for (let i=0; i<position.candidateId.length; i++){
+                    if(position.candidateId[i] == candidate.userId) array.splice(position.candidateId[i], 1);
+                }
+            }
+            candidate.remove((err, docs)=>{
+                if (!err){
+                    return res.status(200).send({"success":"Candidate deleted"});
                 }
                 else{
-                    res.status(400).send({"error":err});
+                    return res.status(400).send({"error":err});
                 }
             });
         } catch (err) {
-            res.status(400).send({"error":err});
+            return res.status(400).send({"error":err});
         }
     }
 }

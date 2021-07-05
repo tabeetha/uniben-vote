@@ -4,8 +4,7 @@ const mongosePaginate = require('mongoose-paginate');
 let ImageSchema = new mongoose.Schema({
     voterId : {
         type : [mongoose.Schema.Types.ObjectId],
-        ref : 'User',
-        required: true
+        ref : 'User'
     },
     candidateId : {
         type : [mongoose.Schema.Types.ObjectId],

@@ -1,4 +1,5 @@
 const VoteModel = require("./vote.model");
+const CandidateModel = require("../candidate/candidate.model");
 
 module.exports =  {
     async registerVote(req,res){
@@ -97,6 +98,7 @@ module.exports =  {
                             console.log(count);
                         }
                     }
+                    
                     return res.status(200).send({"vote":count});
                 }
                 else{
