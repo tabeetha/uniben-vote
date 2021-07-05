@@ -74,15 +74,13 @@ module.exports =  {
     async getAllVotes(req,res){
         try {
             VoteModel.find((err, docs)=>{
-                if(!err){
-                    function onlyUnique(value, index, self) {
-                        return self.indexOf(value) === index;
-                      }
-                      
-                      // usage example:
-                      let a = docs;
-                      let unique = a.filter(onlyUnique);
-                    res.status(200).send(unique);
+                if(!err || docs.length > 0){
+                    if(docs.candidateId) for(let i=0; i<docs.candidateId.length; i++){
+                        for(let j=i+1; j<docs.candidateId.length; j++){
+                            if(docs.candidateId[i] == docs.candidateId[j]) array.splice(docs.candidateId[i], 1);
+                        }
+                    }
+                    return res.status(200).send(docs);
                 }
                 else{
                     res.status(400).send({"error":err});
