@@ -78,12 +78,11 @@ module.exports =  {
                     for(let k=0; k<docs.length; k++){
                         if(docs[k].candidateId) for(let i=0; i<docs[k].candidateId.length; i++){
                             for(let j=i+1; j<docs[k].candidateId.length; j++){
-                                if(docs[k].candidateId[i] == docs[k].candidateId[j]) array.splice(docs[k].candidateId[i], 1);
+                                if(docs[k].candidateId[i]._id == docs[k].candidateId[j]._id) array.splice(docs[k].candidateId[i], 1);
                             }
                         }
                     }
                     
-                    console.log(docs);
                     return res.status(200).send(docs);
                 }
                 else{
