@@ -6,7 +6,7 @@ const voteRouter = express.Router();
 module.exports = voteRouter;
 
 voteRouter.route('/')
-    .post(protect, authorize('admin'),voteController.registerVote)
+    .post(protect,voteController.registerVote)
     .get(voteController.getAllVotes);
 
 voteRouter.route('/:id')
