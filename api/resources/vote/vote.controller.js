@@ -74,14 +74,14 @@ module.exports =  {
     async getAllVotes(req,res){
         try {
             VoteModel.find((err, docs)=>{
-                if(!err || docs.length > 0){
-                    for(let k=0; k<docs.length; k++){
-                        if(docs[k].candidateId) for(let i=0; i<docs[k].candidateId.length; i++){
-                            for(let j=i+1; j<docs[k].candidateId.length; j++){
-                                if(docs[k].candidateId[i]._id == docs[k].candidateId[j]._id) array.splice(docs[k].candidateId[i], 1);
-                            }
-                        }
-                    }
+                if(!err){
+                    // for(let k=0; k<docs.length; k++){
+                    //     if(docs[k].candidateId) for(let i=0; i<docs[k].candidateId.length; i++){
+                    //         for(let j=i+1; j<docs[k].candidateId.length; j++){
+                    //             if(docs[k].candidateId[i]._id == docs[k].candidateId[j]._id) array.splice(docs[k].candidateId[i], 1);
+                    //         }
+                    //     }
+                    // }
                     
                     return res.status(200).send(docs);
                 }
