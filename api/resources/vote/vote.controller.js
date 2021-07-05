@@ -75,11 +75,15 @@ module.exports =  {
         try {
             VoteModel.find((err, docs)=>{
                 if(!err || docs.length > 0){
-                    if(docs.candidateId) for(let i=0; i<docs.candidateId.length; i++){
-                        for(let j=i+1; j<docs.candidateId.length; j++){
-                            if(docs.candidateId[i] == docs.candidateId[j]) array.splice(docs.candidateId[i], 1);
+                    for(let k=0; k<docs.length; k++){
+                        if(docs[k].candidateId) for(let i=0; i<docs[k].candidateId.length; i++){
+                            for(let j=i+1; j<docs[k].candidateId.length; j++){
+                                if(docs[k].candidateId[i] == docs[k].candidateId[j]) array.splice(docs[k].candidateId[i], 1);
+                            }
                         }
                     }
+                    
+                    console.log(docs);
                     return res.status(200).send(docs);
                 }
                 else{
