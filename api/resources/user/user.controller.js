@@ -36,20 +36,20 @@ module.exports = {
             const department = data.department;
             const password = data.password;
             
-            var user = new UserModel();
-                        user.name = name;
-                        user.email = email;
-                        user.phonenumber = phonenumber;
-                        user.faculty = faculty;
-                        user.matnumber = matnumber;
-                        user.department = department;
+            var newUser = new UserModel();
+                        newUser.name = name;
+                        newUser.email = email;
+                        newUser.phonenumber = phonenumber;
+                        newUser.faculty = faculty;
+                        newUser.matnumber = matnumber;
+                        newUser.department = department;
 
                         //HASHING THE password with bcryptjs
                         const salt = await bcriptjs.genSalt(10);
                         const hashedPassword = await bcriptjs.hash(password,salt);
-                        user.password = hashedPassword;
+                        newUser.password = hashedPassword;
 
-                        await user.save((err, docs)=>{
+                        await newUser.save((err, docs)=>{
                             if (!err){
                                 res.status(200).send({"success": "User Created"});
                             }
